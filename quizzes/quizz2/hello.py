@@ -3,9 +3,8 @@ from flask import request
 import json
 
 app = Flask(__name__)
-
 UserId= 0
-Users= []
+users= []
 
 @app.route('/', methods=['GET'])
 def hello():
@@ -19,23 +18,21 @@ def new_users():
     NewUser = {'id' : UserId,
                 'name' : name
     }
-    Users.append(NewUser)
+    users.append(NewUser)
     return json.dumps(NewUser),201
 
 @app.route('/users/<id>',methods=['GET'])
 def getUser(id):
-     for i in range (len(Users)):
-        if Users[i]['id'] == id:
-            print(json.dumps(Users[i]))
-            return json.dumps(Users[i]),200
-        else:
-            return 'No User Found with ID', 404
+    for i in range (0,len(users)):
+        if int(users[i]['id']) == int(id):
+            return json.dumps(users[i]),200
+    return 'No User Found with given ID',404
 
 @app.route('/users/<id>',methods=['DELETE'])
 def deleteUser(id):
-    for i in range(len(Users)):
-        if Users[i]['id'] == id:
-            Users.remove(Users[i])
+    #print(id)
+    for i in range(len(users)):
+        if int(users[i]['id']) == int(id):
+            users.remove(users[i])
             return '', 204
-        else:
-            return " ", 204
+    return " ", 404
